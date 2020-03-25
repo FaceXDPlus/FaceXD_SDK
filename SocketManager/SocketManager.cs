@@ -14,15 +14,15 @@ namespace FaceXD
 {
     class SocketManager
     {
-        private Socket _ServerSocket;                       //服务器监听套接字
-        private bool _IsListionContect;                     //是否在监听
+        private Socket _ServerSocket;
+        private bool _IsListionContect;
         private Thread _thClientMsg;
         public void StopServer()
         {
             if (_ServerSocket != null)
             {
                 _IsListionContect = false;
-                _ServerSocket.Shutdown(SocketShutdown.Both)
+                _ServerSocket.Shutdown(SocketShutdown.Both);
                 _ServerSocket.Close();
                 if (_thClientMsg != null)
                 {
