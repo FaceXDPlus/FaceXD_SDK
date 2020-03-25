@@ -22,7 +22,7 @@ namespace FaceXD
             if (_ServerSocket != null)
             {
                 _IsListionContect = false;
-                //_ServerSocket.Shutdown(SocketShutdown.Both)
+                _ServerSocket.Shutdown(SocketShutdown.Both)
                 _ServerSocket.Close();
                 if (_thClientMsg != null)
                 {
@@ -34,15 +34,10 @@ namespace FaceXD
         {
             try
             {
-                //定义网络终节点（封装IP和端口）
                 IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 8040);
-                //实例化套接字
                 _ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //服务端绑定地址
                 _ServerSocket.Bind(endPoint);
-                //开始监听
                 _ServerSocket.Listen(1);
-                //监听的最大长度
                 Debug.Log("启动监听{0}成功" + _ServerSocket.LocalEndPoint.ToString());
 
                 //我们建议你使用Loom
@@ -159,22 +154,22 @@ namespace FaceXD
             Debug.Log("解析 JSON ...." + input);
 
             /*var jsonResult = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(input);
-            _D2LiveModelController.paramMouthOpenYValue = float.Parse(jsonResult["mouthOpenY"].ToString());
-            _D2LiveModelController.ParamEyeBallXValue = float.Parse(jsonResult["eyeX"].ToString());
-            _D2LiveModelController.ParamEyeBallYValue = float.Parse(jsonResult["eyeY"].ToString());
-            _D2LiveModelController.paramAngleXValue = float.Parse(jsonResult["headYaw"].ToString());
-            _D2LiveModelController.paramAngleYValue = float.Parse(jsonResult["headPitch"].ToString());
-            _D2LiveModelController.paramAngleZValue = float.Parse(jsonResult["headRoll"].ToString());
-            _D2LiveModelController.ParamBodyAngleXValue = float.Parse(jsonResult["bodyAngleX"].ToString());
-            _D2LiveModelController.ParamBodyAngleYValue = float.Parse(jsonResult["bodyAngleY"].ToString());
-            _D2LiveModelController.ParamBodyAngleZValue = float.Parse(jsonResult["bodyAngleZ"].ToString());
-            _D2LiveModelController.paramBrowAngleLValue = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
-            _D2LiveModelController.paramBrowAngleRValue = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
-            _D2LiveModelController.paramMouthFormValue = float.Parse(jsonResult["mouthForm"].ToString());
-            _D2LiveModelController.paramBrowRYValue = float.Parse(jsonResult["eyeBrowYR"].ToString());
-            _D2LiveModelController.paramBrowLYValue = float.Parse(jsonResult["eyeBrowYL"].ToString());
-            _D2LiveModelController.paramEyeROpenValue = float.Parse(jsonResult["eyeROpen"].ToString());
-            _D2LiveModelController.paramEyeLOpenValue = float.Parse(jsonResult["eyeLOpen"].ToString());*/
+             = float.Parse(jsonResult["mouthOpenY"].ToString());
+             = float.Parse(jsonResult["eyeX"].ToString());
+             = float.Parse(jsonResult["eyeY"].ToString());
+             = float.Parse(jsonResult["headYaw"].ToString());
+             = float.Parse(jsonResult["headPitch"].ToString());
+             = float.Parse(jsonResult["headRoll"].ToString());
+             = float.Parse(jsonResult["bodyAngleX"].ToString());
+             = float.Parse(jsonResult["bodyAngleY"].ToString());
+             = float.Parse(jsonResult["bodyAngleZ"].ToString());
+             = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
+             = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
+             = float.Parse(jsonResult["mouthForm"].ToString());
+             = float.Parse(jsonResult["eyeBrowYR"].ToString());
+             = float.Parse(jsonResult["eyeBrowYL"].ToString());
+             = float.Parse(jsonResult["eyeROpen"].ToString());
+             = float.Parse(jsonResult["eyeLOpen"].ToString());*/
         }
 
     }
