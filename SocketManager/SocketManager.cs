@@ -119,16 +119,17 @@ namespace FaceXD
             }
         }
 
+        //public void GetStringJson(string tmpData, CubismModel model)
         public void GetStringJson(string tmpData)
         {
-            List<string> outputList = new List<string>();
-
             int idxStart = tmpData.IndexOf("{");
+            tmpData = tmpData.Substring(idxStart, tmpData.Length - idxStart);
+            idxStart = 0;
             int idxEnd = 0;
-            while (tmpData.Contains("}"))
+            while (tmpData.Contains("}}"))
             {
-                idxEnd = tmpData.IndexOf("}", idxEnd) + 1;
-                Console.WriteLine("{}=>" + idxStart.ToString() + "--" + idxEnd.ToString());
+                idxEnd = tmpData.IndexOf("}}", idxEnd) + 2;
+                //Console.WriteLine("{}=>" + idxStart.ToString() + "--" + idxEnd.ToString());
                 if (idxStart >= idxEnd)
                 {
                     continue;// 找下一个 "}"
@@ -136,40 +137,45 @@ namespace FaceXD
 
                 var sJSON = tmpData.Substring(idxStart, idxEnd);
 
-                doJsonPrase(sJSON);
+                
+                //DoJsonPrase(sJSON, model);
+                DoJsonPrase(sJSON);
+                //break;
 
                 tmpData = tmpData.Substring(idxEnd); //剩余未解析部分
                 idxEnd = 0; //复位
 
-                if (tmpData.Contains("{") && tmpData.Contains("}") && (tmpData.Length > 2))
+                if (tmpData.Contains("{") && tmpData.Contains("}}") && (tmpData.Length > 2))
                 {
-                    GetStringJson(tmpData);
+                    GetStringJson(tmpData, model);
                     break;
                 }
             }
         }
 
-        public void doJsonPrase(string input)
+        //public void DoJsonPrase(string input, CubismModel model)
+        public void DoJsonPrase(string input)
         {
-            Debug.Log("解析 JSON ...." + input);
-
-            /*var jsonResult = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(input);
-             = float.Parse(jsonResult["mouthOpenY"].ToString());
-             = float.Parse(jsonResult["eyeX"].ToString());
-             = float.Parse(jsonResult["eyeY"].ToString());
-             = float.Parse(jsonResult["headYaw"].ToString());
-             = float.Parse(jsonResult["headPitch"].ToString());
-             = float.Parse(jsonResult["headRoll"].ToString());
-             = float.Parse(jsonResult["bodyAngleX"].ToString());
-             = float.Parse(jsonResult["bodyAngleY"].ToString());
-             = float.Parse(jsonResult["bodyAngleZ"].ToString());
-             = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
-             = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
-             = float.Parse(jsonResult["mouthForm"].ToString());
-             = float.Parse(jsonResult["eyeBrowYR"].ToString());
-             = float.Parse(jsonResult["eyeBrowYL"].ToString());
-             = float.Parse(jsonResult["eyeROpen"].ToString());
-             = float.Parse(jsonResult["eyeLOpen"].ToString());*/
+            if (input.Substring(0, 1) == "{" && input.Substring(input.Length - 2, 2) == "}}")
+            {
+                var jsonResult = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(input);
+                /*model.GetComponent<AMGModelController>().paramMouthOpenYValue = float.Parse(jsonResult["mouthOpenY"].ToString());
+                model.GetComponent<AMGModelController>().ParamEyeBallXValue = float.Parse(jsonResult["eyeX"].ToString());
+                model.GetComponent<AMGModelController>().ParamEyeBallYValue = float.Parse(jsonResult["eyeY"].ToString());
+                model.GetComponent<AMGModelController>().paramAngleXValue = float.Parse(jsonResult["headYaw"].ToString());
+                model.GetComponent<AMGModelController>().paramAngleYValue = float.Parse(jsonResult["headPitch"].ToString());
+                model.GetComponent<AMGModelController>().paramAngleZValue = float.Parse(jsonResult["headRoll"].ToString());
+                //model.GetComponent<AMGModelController>().ParamBodyAngleXValue = float.Parse(jsonResult["bodyAngleX"].ToString());
+                //model.GetComponent<AMGModelController>().ParamBodyAngleYValue = float.Parse(jsonResult["bodyAngleY"].ToString());
+                //model.GetComponent<AMGModelController>().ParamBodyAngleZValue = float.Parse(jsonResult["bodyAngleZ"].ToString());
+                model.GetComponent<AMGModelController>().paramBrowAngleLValue = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
+                model.GetComponent<AMGModelController>().paramBrowAngleRValue = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
+                model.GetComponent<AMGModelController>().paramMouthFormValue = float.Parse(jsonResult["mouthForm"].ToString());
+                model.GetComponent<AMGModelController>().paramBrowRYValue = float.Parse(jsonResult["eyeBrowYR"].ToString());
+                model.GetComponent<AMGModelController>().paramBrowLYValue = float.Parse(jsonResult["eyeBrowYL"].ToString());
+                model.GetComponent<AMGModelController>().paramEyeROpenValue = float.Parse(jsonResult["eyeROpen"].ToString());
+                model.GetComponent<AMGModelController>().paramEyeLOpenValue = float.Parse(jsonResult["eyeLOpen"].ToString());*/
+            }
         }
 
     }
