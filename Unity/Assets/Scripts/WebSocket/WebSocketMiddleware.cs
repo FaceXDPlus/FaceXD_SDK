@@ -18,9 +18,8 @@ namespace AMG
             {
                 Globle.IPMessage.Add(ip, text);
             }
-            //var log = string.Format("时间:{0} 用户:{1} 信息:{2}", DateTime.Now.ToString("mm:ss"), context.Session.RemoteEndPoint.ToString(), text);
+            //var log = string.Format("鏃堕棿:{0} 鐢ㄦ埛:{1} 淇℃伅:{2}", DateTime.Now.ToString("mm:ss"), context.Session.RemoteEndPoint.ToString(), text);
             //Debug.Log(log);
-            //Globle.DataLog = Globle.DataLog + log;
         }
     }
 

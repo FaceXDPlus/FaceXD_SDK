@@ -16,33 +16,26 @@ namespace AMG
     public class Globle : MonoBehaviour
     {
         public static Dictionary<string, string> IPMessage;
-        public static string DataLog;
     }
+    
     public class AMGMain : MonoBehaviour
     {
         
         private AMGSocketManager mySocketServer;
-        private ArrayList ModelList;
 
         void Start()
         {
-            ModelList = new ArrayList();
             Globle.IPMessage = new Dictionary<string, string>();
-        }
-
-        public void onSocketSwitchSwitched()
-        {
-            if (SocketSwitch.isOn == true)
-            {
-                this.mySocketServer = new AMGSocketManager();
-                this.mySocketServer.setSocketSwitch(SocketSwitch);
-                this.mySocketServer.SocketStart();
-            }
-            else
-            {
+            
+            this.mySocketServer = new AMGSocketManager();
+            this.mySocketServer.setSocketSwitch(SocketSwitch);
+            this.mySocketServer.SocketStart();
+            
+            /*
+            关闭
                 this.mySocketServer.SocketStop();
                 Globle.IPMessage = new Dictionary<string, string>();
-            }
+            */
         }
 
         public void Update()
@@ -52,55 +45,31 @@ namespace AMG
 
         public void OnBindMessageAndIP()
         {
-            var ModelToIP = Globle.ModelToIP;
             var IPMessage = Globle.IPMessage;
-            foreach (KeyValuePair<string, string> kvp in ModelToIP)
+            foreach (KeyValuePair<string, string> kvp in IPMessage)
             {
-                if (IPMessage.ContainsKey(kvp.Value) && IPMessage[kvp.Value] != "")
-                {
-                    try
-                    {
-                        foreach (CubismModel Model in ModelList)
-                        {
-                            if (Model.name == kvp.Key)
-                            {
-                                DoJsonPrase(IPMessage[kvp.Value], Model);
-                                //在此解析json
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.Log("发生错误 " + ex.Message + ":" + ex.StackTrace);
-                    }
-                }
+                Debug.Log(kvp.Key + ":" +  kvp.Value);
+                DoJsonPrase(kvp.Value);
             }
         }
 
-        public void DoJsonPrase(string input, CubismModel model)
+        public void DoJsonPrase(string input)
         {
             var jsonResult = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(input);
-            model.GetComponent<AMGModelController>().paramMouthOpenYValue = float.Parse(jsonResult["mouthOpenY"].ToString());
-            model.GetComponent<AMGModelController>().ParamEyeBallXValue = float.Parse(jsonResult["eyeX"].ToString());
-            model.GetComponent<AMGModelController>().ParamEyeBallYValue = float.Parse(jsonResult["eyeY"].ToString());
-            model.GetComponent<AMGModelController>().paramAngleXValue = float.Parse(jsonResult["headYaw"].ToString());
-            model.GetComponent<AMGModelController>().paramAngleYValue = float.Parse(jsonResult["headPitch"].ToString());
-            model.GetComponent<AMGModelController>().paramAngleZValue = float.Parse(jsonResult["headRoll"].ToString());
-            //model.GetComponent<AMGModelController>().ParamBodyAngleXValue = float.Parse(jsonResult["bodyAngleX"].ToString());
-            //model.GetComponent<AMGModelController>().ParamBodyAngleYValue = float.Parse(jsonResult["bodyAngleY"].ToString());
-            //model.GetComponent<AMGModelController>().ParamBodyAngleZValue = float.Parse(jsonResult["bodyAngleZ"].ToString());
-            model.GetComponent<AMGModelController>().paramBrowAngleLValue = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
-            model.GetComponent<AMGModelController>().paramBrowAngleRValue = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
-            model.GetComponent<AMGModelController>().paramMouthFormValue = float.Parse(jsonResult["mouthForm"].ToString());
-            model.GetComponent<AMGModelController>().paramBrowRYValue = float.Parse(jsonResult["eyeBrowYR"].ToString());
-            model.GetComponent<AMGModelController>().paramBrowLYValue = float.Parse(jsonResult["eyeBrowYL"].ToString());
-            model.GetComponent<AMGModelController>().paramEyeROpenValue = float.Parse(jsonResult["eyeROpen"].ToString());
-            model.GetComponent<AMGModelController>().paramEyeLOpenValue = float.Parse(jsonResult["eyeLOpen"].ToString());
-        }
-        
-        public void Log(string text)
-        {
-            //DebugLogText.text = DebugLogText.text + "\n" + text;
+            //在此进行JSON解析
+            /*paramMouthOpenYValue = float.Parse(jsonResult["mouthOpenY"].ToString());
+            ParamEyeBallXValue = float.Parse(jsonResult["eyeX"].ToString());
+            ParamEyeBallYValue = float.Parse(jsonResult["eyeY"].ToString());
+            paramAngleXValue = float.Parse(jsonResult["headYaw"].ToString());
+            paramAngleYValue = float.Parse(jsonResult["headPitch"].ToString());
+            paramAngleZValue = float.Parse(jsonResult["headRoll"].ToString());
+            paramBrowAngleLValue = float.Parse(jsonResult["eyeBrowAngleL"].ToString());
+            paramBrowAngleRValue = float.Parse(jsonResult["eyeBrowAngleR"].ToString());
+            paramMouthFormValue = float.Parse(jsonResult["mouthForm"].ToString());
+            paramBrowRYValue = float.Parse(jsonResult["eyeBrowYR"].ToString());
+            paramBrowLYValue = float.Parse(jsonResult["eyeBrowYL"].ToString());
+            paramEyeROpenValue = float.Parse(jsonResult["eyeROpen"].ToString());
+            paramEyeLOpenValue = float.Parse(jsonResult["eyeLOpen"].ToString());*/
         }
     }
 }
