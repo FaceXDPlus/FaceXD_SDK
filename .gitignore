@@ -1,3 +1,5 @@
 SocketManager/bin
 SocketManager/obj
 *.meta
+.vs/
+FaceXDSDK/obj/
