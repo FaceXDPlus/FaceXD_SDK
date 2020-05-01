@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Threading;
-using FaceXDSDK.Network;
+using FaceXDSDK;
 namespace FaceXDSDKSample
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Ready to create websocket server");
-            WebSocket websocket = new WebSocket();
-            websocket.Start("http://127.0.0.1:12001/");
-            Console.WriteLine("Websocket server start");
+            FaceXDSDK.Server<FaceXDSDK.Network.WebSocket> server = new FaceXDSDK.Server<FaceXDSDK.Network.WebSocket>();
+            server.Run("http://127.0.0.1:12001/");
+
             Console.ReadKey();
         }
     }

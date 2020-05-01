@@ -9,10 +9,15 @@ using System.Text;
 
 namespace FaceXDSDK.Network
 {
-    public class WebSocketClient
+    public class WebSocketClient: Client
     {
         public HttpListenerContext http { get; set; }
         public HttpListenerWebSocketContext webSocket { get; set; }
+
+        public override Task CloseAsync()
+        {
+           return webSocket.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+        }
     }
 
     public class WebSocket : BaseNetwork
@@ -25,7 +30,6 @@ namespace FaceXDSDK.Network
             InternalServerError = 500,
             NotImplemented = 501,
         }
-        private bool isRunning = false;
 
         private HttpListener _listern;
         private HttpListener listener
@@ -40,19 +44,15 @@ namespace FaceXDSDK.Network
             }
         }
 
-        /// <summary>
-        /// Key: User UUID String
-        /// </summary>
-        private Dictionary<String, WebSocketClient> clientMap = new Dictionary<string, WebSocketClient>();
 
         public WebSocket()
         {
 
         }
 
-        public void Start(string listenUrl)
+        public override void Start(string listenUrl)
         {
-            if (this.isRunning)
+            if (this.IsRunning)
             {
                 return;
             }
@@ -63,10 +63,35 @@ namespace FaceXDSDK.Network
             OnStartServerAsync();
         }
 
+        public override void Stop()
+        {
+            OnStopServerAsync();
+        }
+
+        protected async void RemoveClientAsync(string guid)
+        {
+            Client client = this.ClientContainer[guid];
+            if (client != null)
+            {
+                await client.CloseAsync();
+                await Task.Run(() => {
+                    this.OnDisconnect?.Invoke(guid);
+                });
+            }
+            lock (this.ClientContainer)
+            {
+                if (this.ClientContainer.ContainsKey(guid))
+                {
+                    this.ClientContainer.Remove(guid);
+                }
+            }
+        }
+
+        /// MARK: - Handler
         private async void OnStartServerAsync()
         {
-            this.isRunning = true;
-            while (this.isRunning)
+            this.IsRunning = true;
+            while (this.IsRunning)
             {
                 HttpListenerContext context = await this.listener.GetContextAsync();
                 if (context.Request.IsWebSocketRequest)
@@ -81,27 +106,43 @@ namespace FaceXDSDK.Network
                     context.Response.Close();
                 }
             }
-            this.isRunning = false;
+            this.IsRunning = false;
         }
 
-        /// MARK: - Handler
+        private async void OnStopServerAsync()
+        {
+            this.listener.Stop();
+            List<Task> tasks = new List<Task>();
+
+            foreach (var kv in this.ClientContainer)
+            {
+                var task = kv.Value.CloseAsync();
+                tasks.Add(task);
+            }
+            await Task.WhenAll(tasks);
+            this.IsRunning = false;
+        }
         private async void OnReceiveWebSocketRequestAsync(HttpListenerContext context)
         {
-            HttpListenerWebSocketContext webSocketContext = null;
             try
             {
-                webSocketContext = await context.AcceptWebSocketAsync(null);
+                HttpListenerWebSocketContext webSocketContext = await context.AcceptWebSocketAsync(null);
                 var guid = Guid.NewGuid().ToString();
-                var client = new WebSocketClient();
-                client.http = context;
-                client.webSocket = webSocketContext;
-                lock (this.clientMap)
+                var client = new WebSocketClient
                 {
-                    this.clientMap.Add(guid, client);
+                    http = context,
+                    webSocket = webSocketContext
+                };
+                lock (this.ClientContainer)
+                {
+                    this.ClientContainer.Add(guid, client);
                 }
+                await Task.Run(() => {
+                    this.onConnect?.Invoke(guid);
+                });
                 OnAcceptWebSocketAsync(webSocketContext, guid);
             }
-            catch (Exception e)
+            catch
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.Close();
@@ -117,19 +158,12 @@ namespace FaceXDSDK.Network
                 {
                     var buffer = System.Net.WebSockets.WebSocket.CreateServerBuffer(WebSocket.ServerBufferSize);
                     WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, CancellationToken.None);
-                    if (result.MessageType == WebSocketMessageType.Close)
+                    if (result.MessageType != WebSocketMessageType.Close)
                     {
-                        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-                        lock (this.clientMap)
-                        {
-                            this.clientMap.Remove(guid);
-                        }
+                        await Task.Run(() => {
+                            this.OnReceiveData?.Invoke(guid, buffer, result.Count);
+                        });
                     }
-                    else
-                    {
-                        await OnWebSocketReceiveDataAsync(webSocket, guid, buffer, result.Count);
-                    }
-
                 }
             }
             catch (Exception e)
@@ -141,19 +175,9 @@ namespace FaceXDSDK.Network
                 if (webSocket != null)
                 {
                     webSocket.Dispose();
-                    lock (this.clientMap)
-                    {
-                        this.clientMap.Remove(guid);
-                    }
+                    RemoveClientAsync(guid);
                 }
             }
-        }
-        private Task OnWebSocketReceiveDataAsync(System.Net.WebSockets.WebSocket webSocket, string guid, ArraySegment<byte> buffer, int count)
-        {
-            return Task.Run(() =>
-            {
-                Console.WriteLine("receive from {0}: {1}", guid, Encoding.UTF8.GetString(buffer.Array, 0, count));
-            });
         }
     }
 }
