@@ -3,3 +3,6 @@ SocketManager/obj
 *.meta
 .vs/
 FaceXDSDK/obj/
+FaceXDSDK/bin/
+FaceXDSDKSample/bin/
+FaceXDSDKSample/obj/
