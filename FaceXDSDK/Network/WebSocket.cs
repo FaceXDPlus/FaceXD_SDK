@@ -166,7 +166,7 @@ namespace FaceXDSDK.Network
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 /// Just catch
             }
