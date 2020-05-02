@@ -8,6 +8,7 @@ namespace FaceXDSDK
 {
     public class Client
     {
+        public string Guid { get; set; }
         virtual public Task CloseAsync()
         {
             return Task.Run(() =>

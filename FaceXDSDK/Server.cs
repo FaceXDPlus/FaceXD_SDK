@@ -9,11 +9,6 @@ namespace FaceXDSDK
         private NetworkComponent networkObject = null;
         public string ListenUrl { set; get; }
 
-
-        public static Server<WebSocketSharpComponent> DefaultWebSocketServer()
-        {
-            return new Server<WebSocketSharpComponent>();
-        }
         public Server()
         {
             

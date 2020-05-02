@@ -9,16 +9,15 @@ namespace FaceXDSDK.Network
 {
     public class DotNetWebSocketComponent : BaseNetworkComponent
     {
-        public class WebSocketClient : Client
+        public class DotNetWebSocketClient : Client
         {
             public Action<string, bool> OnCloseAsyncNotifyServer;
-            public WebSocketClient(HttpListenerContext httpContext, HttpListenerWebSocketContext webSocketContext, string guid)
+            public DotNetWebSocketClient(HttpListenerContext httpContext, HttpListenerWebSocketContext webSocketContext, string guid)
             {
                 this.Guid = guid;
                 this.httpContext = httpContext;
                 this.webSocketContext = webSocketContext;
             }
-            public string Guid { get; set; }
             private HttpListenerContext httpContext;
             private HttpListenerWebSocketContext webSocketContext;
 
@@ -150,7 +149,7 @@ namespace FaceXDSDK.Network
             {
                 HttpListenerWebSocketContext webSocketContext = await context.AcceptWebSocketAsync(null);
                 var guid = Guid.NewGuid().ToString();
-                var client = new DotNetWebSocketComponent.WebSocketClient(context, webSocketContext, guid)
+                var client = new DotNetWebSocketComponent.DotNetWebSocketClient(context, webSocketContext, guid)
                 {
                     OnCloseAsyncNotifyServer = new Action<string, bool>(this.RemoveClientAsync)
                 };
