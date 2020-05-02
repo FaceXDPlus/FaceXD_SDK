@@ -1,0 +1,3 @@
+[submodule "FaceXDSDK/Vendor/websocket-sharp"]
+	path = FaceXDSDK/Vendor/websocket-sharp
+	url = https://github.com/sta/websocket-sharp.git
