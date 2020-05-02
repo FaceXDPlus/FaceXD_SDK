@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.WebSockets;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text;
 
 namespace FaceXDSDK.Network
 {
-    public class WebSocketClient: Client
+    public class DotNetWebSocketComponent : BaseNetworkComponent
     {
-        public HttpListenerContext http { get; set; }
-        public HttpListenerWebSocketContext webSocket { get; set; }
-
-        public override Task CloseAsync()
+        public class WebSocketClient : Client
         {
-           return webSocket.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-        }
-    }
+            public Action<string, bool> OnCloseAsyncNotifyServer;
+            public WebSocketClient(HttpListenerContext httpContext, HttpListenerWebSocketContext webSocketContext, string guid)
+            {
+                this.Guid = guid;
+                this.httpContext = httpContext;
+                this.webSocketContext = webSocketContext;
+            }
+            public string Guid { get; set; }
+            private HttpListenerContext httpContext;
+            private HttpListenerWebSocketContext webSocketContext;
 
-    public class WebSocket : BaseNetwork
-    {
+            public override Task CloseAsync()
+            {
+                var task = webSocketContext.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                OnCloseAsyncNotifyServer(this.Guid, false);
+                return task;
+            }
+        }
+
         private const int ServerBufferSize = 4 * 1024 * 1024;
         private enum HttpStatusCode
         {
@@ -45,9 +53,14 @@ namespace FaceXDSDK.Network
         }
 
 
-        public WebSocket()
+        public DotNetWebSocketComponent()
         {
 
+        }
+
+        public new void Dispose()
+        {
+            this.Stop();
         }
 
         public override void Start(string listenUrl)
@@ -68,12 +81,20 @@ namespace FaceXDSDK.Network
             OnStopServerAsync();
         }
 
-        protected async void RemoveClientAsync(string guid)
+        protected void RemoveClientAsync(string guid)
+        {
+            RemoveClientAsync(guid, true);
+        }
+
+        protected async void RemoveClientAsync(string guid, bool closeClient)
         {
             Client client = this.ClientContainer[guid];
             if (client != null)
             {
-                await client.CloseAsync();
+                if (closeClient)
+                {
+                    await client.CloseAsync();
+                }
                 await Task.Run(() => {
                     this.OnDisconnect?.Invoke(guid);
                 });
@@ -85,6 +106,7 @@ namespace FaceXDSDK.Network
                     this.ClientContainer.Remove(guid);
                 }
             }
+            GC.Collect();
         }
 
         /// MARK: - Handler
@@ -128,17 +150,16 @@ namespace FaceXDSDK.Network
             {
                 HttpListenerWebSocketContext webSocketContext = await context.AcceptWebSocketAsync(null);
                 var guid = Guid.NewGuid().ToString();
-                var client = new WebSocketClient
+                var client = new DotNetWebSocketComponent.WebSocketClient(context, webSocketContext, guid)
                 {
-                    http = context,
-                    webSocket = webSocketContext
+                    OnCloseAsyncNotifyServer = new Action<string, bool>(this.RemoveClientAsync)
                 };
                 lock (this.ClientContainer)
                 {
                     this.ClientContainer.Add(guid, client);
                 }
                 await Task.Run(() => {
-                    this.onConnect?.Invoke(guid);
+                    this.OnConnect?.Invoke(guid);
                 });
                 OnAcceptWebSocketAsync(webSocketContext, guid);
             }
@@ -156,7 +177,7 @@ namespace FaceXDSDK.Network
             {
                 while (webSocket.State == WebSocketState.Open)
                 {
-                    var buffer = System.Net.WebSockets.WebSocket.CreateServerBuffer(WebSocket.ServerBufferSize);
+                    var buffer = WebSocket.CreateServerBuffer(DotNetWebSocketComponent.ServerBufferSize);
                     WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, CancellationToken.None);
                     if (result.MessageType != WebSocketMessageType.Close)
                     {

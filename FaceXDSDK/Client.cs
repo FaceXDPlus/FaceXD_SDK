@@ -15,10 +15,5 @@ namespace FaceXDSDK
 
             });
         }
-
-        virtual public void Close(Task task)
-        {
-            task.RunSynchronously();
-        }
     }
 }

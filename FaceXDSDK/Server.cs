@@ -4,29 +4,33 @@ using System.Text;
 namespace FaceXDSDK
 {
 
-    public class Server<NetworkComponent>: Object where NetworkComponent: BaseNetwork, new()
+    public class Server<NetworkComponent>: Object, IDisposable where NetworkComponent: BaseNetworkComponent, new()
     {
         private NetworkComponent networkObject = null;
         public string ListenUrl { set; get; }
 
 
-        public static Server<WebSocket> DefaultWebSocketServer()
+        public static Server<WebSocketSharpComponent> DefaultWebSocketServer()
         {
-            return new Server<WebSocket>();
+            return new Server<WebSocketSharpComponent>();
         }
         public Server()
         {
             
         }
 
+        public void Dispose()
+        {
+            this.networkObject.Dispose();
+        }
         public void Run(string listenUrl)
         {            this.ListenUrl = listenUrl;
             this.networkObject = new NetworkComponent();
             this.networkObject.Start(listenUrl);
 
-            this.networkObject.onConnect = new BaseNetwork.Delegate.OnConnect(this.OnNetworkObjectClientConnnect);
-            this.networkObject.OnReceiveData = new BaseNetwork.Delegate.OnReceiveData(this.OnNetworkObjectClientReceiveData);
-            this.networkObject.OnDisconnect = new BaseNetwork.Delegate.OnDisconnect(this.OnNetworkObjectClientDisconnect);
+            this.networkObject.OnConnect = new BaseNetworkComponent.Delegate.OnConnect(this.OnNetworkObjectClientConnnect);
+            this.networkObject.OnReceiveData = new BaseNetworkComponent.Delegate.OnReceiveData(this.OnNetworkObjectClientReceiveData);
+            this.networkObject.OnDisconnect = new BaseNetworkComponent.Delegate.OnDisconnect(this.OnNetworkObjectClientDisconnect);
         }
 
         public void Stop()
@@ -34,6 +38,10 @@ namespace FaceXDSDK
             this.networkObject.Stop();
         }
 
+        public Client GetClient(string guid)
+        {
+            return this.networkObject.ClientContainer[guid];
+        }
         /// MARK: - Handler
         
         private void OnNetworkObjectClientConnnect(string guid)

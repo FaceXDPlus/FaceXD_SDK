@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FaceXDSDK.Network
 {
-    public class BaseNetwork
+    public class BaseNetworkComponent: IDisposable
     {
         public class Delegate
         {
@@ -12,10 +12,14 @@ namespace FaceXDSDK.Network
             public delegate void OnReceiveData(string guid, ArraySegment<byte> buffer, int size);
             public delegate void OnDisconnect(string guid);
         }
-        public BaseNetwork() {
+        public BaseNetworkComponent() {
 
         }
-        public Delegate.OnConnect onConnect { get; set; }
+        public void Dispose()
+        {
+            this.Stop();
+        }
+        public Delegate.OnConnect OnConnect { get; set; }
         public Delegate.OnReceiveData OnReceiveData { get; set; }
         public Delegate.OnDisconnect OnDisconnect { get; set; }
 
