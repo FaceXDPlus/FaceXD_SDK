@@ -35,15 +35,6 @@ namespace FaceXDSDK.Network
             this.IsRunning = false;
         }
 
-        public virtual async void SendDataAsync(string guid, ArraySegment<byte> buffer, int size)
-        {
-            await Task.Run(() =>
-            {
-
-            });
-        }
-
-
         /// <summary>
         /// Key: User UUID String
         /// </summary>

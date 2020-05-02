@@ -27,6 +27,20 @@ namespace FaceXDSDK.Network
                 OnCloseAsyncNotifyServer(this.Guid, false);
                 return task;
             }
+
+            public override Task SendDataAsync(ArraySegment<byte> buffer, int size)
+            {
+                var data = new ArraySegment<byte>(buffer.ToArray(), 0, size);
+                return this.webSocketContext.WebSocket.SendAsync(data.ToArray(), WebSocketMessageType.Binary, true, CancellationToken.None);
+            }
+
+            public override IPEndPoint UserEndpointAddress
+            {
+                get
+                {
+                    return this.httpContext.Request.RemoteEndPoint;
+                }
+            }
         }
 
         private const int ServerBufferSize = 4 * 1024 * 1024;

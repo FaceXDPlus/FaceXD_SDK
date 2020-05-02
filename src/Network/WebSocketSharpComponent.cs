@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -40,6 +41,16 @@ namespace FaceXDSDK.Network
             {
                 this.CloseAsync();
             }
+
+            public void SendDataWebSocketAsync(ArraySegment<byte> buffer, int size)
+            {
+                var data = new ArraySegment<byte>(buffer.ToArray(), 0, size);
+                this.SendAsync(data.ToArray(), (complete) =>
+                {
+                    /// [TODO] Send OK
+                });
+            }
+
         }
 
         public class WebSocketSharpClient: Client {
@@ -65,6 +76,22 @@ namespace FaceXDSDK.Network
                     OnCloseAsyncNotifyServer(this.Guid, false);
                 });
             }
+
+            public override Task SendDataAsync(ArraySegment<byte> buffer, int size)
+            {
+                return Task.Run(() =>
+                {
+                    this.behavior.SendDataWebSocketAsync(buffer, size);
+                });
+            }
+
+            public override IPEndPoint UserEndpointAddress
+            {
+                get
+                {
+                    return this.behavior.Context.UserEndPoint;
+                }
+            }
         }
 
         private WebSocketServer webSocketServer;
@@ -84,11 +111,6 @@ namespace FaceXDSDK.Network
         public override void Stop()
         {
             this.webSocketServer.Stop();
-        }
-
-        public override async void SendDataAsync(string guid, ArraySegment<byte> buffer, int size)
-        {
-            
         }
 
         protected async void RemoveClientAsync(string guid, bool closeClient)
