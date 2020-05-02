@@ -33,7 +33,7 @@ namespace FaceXDSDK.Model.NetworkPack
                     Dictionary<string, object> results = (Dictionary<string, object>)serializer.ReadObject(ms);
                     this.JsonDictionary = results;
                 }
-                catch (Exception e)
+                catch
                 {
                     this.JsonDictionary = new Dictionary<string, object>
                     {
