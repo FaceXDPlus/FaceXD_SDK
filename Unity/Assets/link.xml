@@ -1,5 +1,0 @@
-<linker>
-    <assembly fullname="NetworkSocket">
-        <type fullname="NetworkSocket*" preserve="all"/>
-    </assembly>
-</linker>
