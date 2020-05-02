@@ -46,7 +46,14 @@ namespace FaceXDSDK.Api
                 Type obj = this.packMap[command];
                 var pack = (BasePack)Activator.CreateInstance(obj, jsonPack.RawData);
                 pack.Deserialized();
-                this.OnDispatchPack?.Invoke(guid, pack);
+                try
+                {
+                    this.OnDispatchPack?.Invoke(guid, pack);
+                }
+                catch
+                {
+
+                }
             }
         }
 

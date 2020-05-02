@@ -44,8 +44,8 @@ namespace FaceXDSDK.Network
 
             public void SendDataWebSocketAsync(ArraySegment<byte> buffer, int size)
             {
-                var data = new ArraySegment<byte>(buffer.ToArray(), 0, size);
-                this.SendAsync(data.ToArray(), (complete) =>
+                var data = new ArraySegment<byte>(buffer.Array, 0, size);
+                this.SendAsync(data.Array, (complete) =>
                 {
                     /// [TODO] Send OK
                 });

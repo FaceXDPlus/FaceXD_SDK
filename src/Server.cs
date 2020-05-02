@@ -70,8 +70,8 @@ namespace FaceXDSDK
         }
         private void OnNetworkObjectClientReceiveData(string guid, ArraySegment<byte> buffer, int size)
         {
-            var data = new ArraySegment<byte>(buffer.ToArray(), 0, size);
-            var pack = new RawJson(data.ToArray());
+            var data = new ArraySegment<byte>(buffer.Array, 0, size);
+            var pack = new RawJson(data.Array);
             this.apiComponentObject.DispatchPack(pack, guid);
         }
 

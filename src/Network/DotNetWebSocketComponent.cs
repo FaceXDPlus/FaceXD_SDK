@@ -30,8 +30,8 @@ namespace FaceXDSDK.Network
 
             public override Task SendDataAsync(ArraySegment<byte> buffer, int size)
             {
-                var data = new ArraySegment<byte>(buffer.ToArray(), 0, size);
-                return this.webSocketContext.WebSocket.SendAsync(data.ToArray(), WebSocketMessageType.Binary, true, CancellationToken.None);
+                var data = new ArraySegment<byte>(buffer.Array, 0, size);
+                return this.webSocketContext.WebSocket.SendAsync(data, WebSocketMessageType.Binary, true, CancellationToken.None);
             }
 
             public override IPEndPoint UserEndpointAddress

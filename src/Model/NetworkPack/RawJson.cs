@@ -28,8 +28,18 @@ namespace FaceXDSDK.Model.NetworkPack
                 settings.UseSimpleDictionaryFormat = true;
 
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Dictionary<string, object>), settings);
-                Dictionary<string, object> results = (Dictionary<string, object>)serializer.ReadObject(ms);
-                this.JsonDictionary = results;
+                try
+                {
+                    Dictionary<string, object> results = (Dictionary<string, object>)serializer.ReadObject(ms);
+                    this.JsonDictionary = results;
+                }
+                catch (Exception e)
+                {
+                    this.JsonDictionary = new Dictionary<string, object>
+                    {
+
+                    };
+                }
             }
         }
     }

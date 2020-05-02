@@ -27,7 +27,7 @@ namespace FaceXDSDKSample
             };
 
             /// Must after register delegate;
-            server.Run("ws://192.168.2.80:12001/");
+            server.Run("ws://127.0.0.1:12003/");
             Console.ReadKey();
         }
 
