@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace FaceXDSDK.Network
 {
-    public class BaseNetworkComponent: IDisposable
+    public class BaseNetworkComponent : IDisposable
     {
         public class Delegate
         {
@@ -12,7 +11,8 @@ namespace FaceXDSDK.Network
             public delegate void OnReceiveData(string guid, ArraySegment<byte> buffer, int size);
             public delegate void OnDisconnect(string guid);
         }
-        public BaseNetworkComponent() {
+        public BaseNetworkComponent()
+        {
 
         }
         public void Dispose()
@@ -24,7 +24,7 @@ namespace FaceXDSDK.Network
         public Delegate.OnDisconnect OnDisconnect { get; set; }
 
         public bool IsRunning { get; set; }
-        
+
         public virtual void Start(string listenUrl)
         {
             this.IsRunning = true;
@@ -38,7 +38,8 @@ namespace FaceXDSDK.Network
         /// <summary>
         /// Key: User UUID String
         /// </summary>
-        public Dictionary<string, Client> ClientContainer {
+        public Dictionary<string, Client> ClientContainer
+        {
             get
             {
                 return clientContainer;

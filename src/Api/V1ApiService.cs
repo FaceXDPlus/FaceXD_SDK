@@ -1,14 +1,12 @@
 ﻿using FaceXDSDK.Model.NetworkPack;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace FaceXDSDK.Api
 {
     namespace v1
     {
-        public class ApiService: BaseApiService
+        public class ApiService : BaseApiService
         {
 
             Dictionary<string, Type> packMap;
@@ -57,23 +55,26 @@ namespace FaceXDSDK.Api
             }
         }
 
-        public class CaptureFaceParameterTransaction: BasePack
+        public class CaptureFaceParameterTransaction : BasePack
         {
-            public CaptureFaceParameterTransaction(byte[] data): base(data)
+            public CaptureFaceParameterTransaction(byte[] data) : base(data)
             {
 
             }
-            public string EyeROpen { 
+            public string EyeROpen
+            {
                 get
                 {
                     return (string)this.JsonDictionary["eyeROpen"];
                 }
-                set {
+                set
+                {
                     this.JsonDictionary["eyeROpen"] = value;
                 }
             }
 
-            public string EyeBrowYL {
+            public string EyeBrowYL
+            {
                 get
                 {
                     return (string)this.JsonDictionary["eyeBrowYL"];
@@ -84,7 +85,8 @@ namespace FaceXDSDK.Api
                 }
             }
 
-            public string MouthOpenY {
+            public string MouthOpenY
+            {
                 get
                 {
                     return (string)this.JsonDictionary["mouthOpenY"];

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.Linq;
-using System.Text;
 
 namespace FaceXDSDK.Model.NetworkPack
 {
@@ -25,7 +21,7 @@ namespace FaceXDSDK.Model.NetworkPack
 
         virtual public void Deserialized()
         {
-            
+
         }
     }
 }

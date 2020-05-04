@@ -108,7 +108,8 @@ namespace FaceXDSDK.Network
                 {
                     await client.CloseAsync();
                 }
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     this.OnDisconnect?.Invoke(guid);
                 });
             }
@@ -171,7 +172,8 @@ namespace FaceXDSDK.Network
                 {
                     this.ClientContainer.Add(guid, client);
                 }
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     this.OnConnect?.Invoke(guid);
                 });
                 OnAcceptWebSocketAsync(webSocketContext, guid);
@@ -194,7 +196,8 @@ namespace FaceXDSDK.Network
                     WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, CancellationToken.None);
                     if (result.MessageType != WebSocketMessageType.Close)
                     {
-                        await Task.Run(() => {
+                        await Task.Run(() =>
+                        {
                             this.OnReceiveData?.Invoke(guid, buffer, result.Count);
                         });
                     }

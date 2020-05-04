@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading;
 namespace FaceXDSDKSample
 {
     class Program
@@ -27,13 +23,13 @@ namespace FaceXDSDKSample
             };
 
             /// Must after register delegate;
-            server.Run("ws://127.0.0.1:12003/");
+            server.Run("ws://0.0.0.0:12003/");
             Console.ReadKey();
         }
 
         static void HandleCaptureFaceParameter(string guid, FaceXDSDK.Api.BasePack pack)
         {
-           var captureFaceParameter = (FaceXDSDK.Api.v1.CaptureFaceParameterTransaction)pack;
+            var captureFaceParameter = (FaceXDSDK.Api.v1.CaptureFaceParameterTransaction)pack;
             Console.WriteLine("[{0}][CaptureFaceParameter]: headPitch: {1}, headRoll: {2}, headYaw: {3}", guid, captureFaceParameter.HeadPitch, captureFaceParameter.HeadRoll, captureFaceParameter.HeadYaw);
         }
     }

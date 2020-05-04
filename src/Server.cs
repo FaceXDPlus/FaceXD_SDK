@@ -3,14 +3,13 @@ using FaceXDSDK.Model.NetworkPack;
 using FaceXDSDK.Network;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FaceXDSDK
 {
 
-    public class Server<NetworkComponent, ApiComponent>: Object, IDisposable where NetworkComponent: BaseNetworkComponent, new() where ApiComponent : BaseApiService, new()
+    public class Server<NetworkComponent, ApiComponent> : Object, IDisposable where NetworkComponent : BaseNetworkComponent, new() where ApiComponent : BaseApiService, new()
     {
-        
+
         private NetworkComponent networkObject = null;
         private ApiComponent apiComponentObject = null;
 
@@ -22,7 +21,7 @@ namespace FaceXDSDK
 
         public Server()
         {
-            
+
         }
 
         public void Dispose()
@@ -30,7 +29,8 @@ namespace FaceXDSDK
             this.networkObject.Dispose();
         }
         public void Run(string listenUrl)
-        {            this.ListenUrl = listenUrl;
+        {
+            this.ListenUrl = listenUrl;
             this.networkObject = new NetworkComponent();
             this.networkObject.Start(listenUrl);
 
@@ -60,7 +60,7 @@ namespace FaceXDSDK
         }
 
         /// MARK: - Handler
-        
+
         private void OnNetworkObjectClientConnnect(string guid)
         {
 #if DEBUG
@@ -80,7 +80,7 @@ namespace FaceXDSDK
 #if DEBUG
             Console.WriteLine("Disconnet: {0}", guid);
 #endif
-            this.OnDisconnectedClient?.Invoke(guid);   
+            this.OnDisconnectedClient?.Invoke(guid);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using WebSocketSharp;
@@ -53,7 +52,8 @@ namespace FaceXDSDK.Network
 
         }
 
-        public class WebSocketSharpClient: Client {
+        public class WebSocketSharpClient : Client
+        {
 
             public Action<string, bool> OnCloseAsyncNotifyServer;
 
@@ -99,7 +99,8 @@ namespace FaceXDSDK.Network
         public override void Start(string listenUrl)
         {
             this.webSocketServer = new WebSocketServer(listenUrl);
-            this.webSocketServer.AddWebSocketService<SDKBehavior>("/", (obj) => {
+            this.webSocketServer.AddWebSocketService<SDKBehavior>("/", (obj) =>
+            {
                 obj.OnWebSocketClose = new Action<SDKBehavior, CloseEventArgs>(this.OnWebSocketClose);
                 obj.OnWebSocketError = new Action<SDKBehavior, ErrorEventArgs>(this.OnWebSocketError);
                 obj.OnWebSocketMessage = new Action<SDKBehavior, MessageEventArgs>(this.OnWebSocketMessageAsync);
@@ -129,7 +130,8 @@ namespace FaceXDSDK.Network
             }
             lock (this.ClientContainer)
             {
-                if (this.ClientContainer.ContainsKey(guid)) {
+                if (this.ClientContainer.ContainsKey(guid))
+                {
                     this.ClientContainer.Remove(guid);
                 }
             }

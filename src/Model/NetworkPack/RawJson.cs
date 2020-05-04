@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace FaceXDSDK.Model.NetworkPack
 {
-    public class RawJson: BaseNetworkPack
+    public class RawJson : BaseNetworkPack
     {
         public Dictionary<string, object> JsonDictionary { get; set; }
-        public RawJson(byte[] data): base(data)
+        public RawJson(byte[] data) : base(data)
         {
-            
+
         }
 
         public override byte[] Serialize()

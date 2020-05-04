@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DD849CFA-3276-47CD-900C-71191AEA7BCC}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FaceXDSDK</RootNamespace>
-    <AssemblyName>FaceXDSDK</AssemblyName>
+    <ProjectGuid>{CBF6376F-A230-499C-951F-B5305FCCCE4D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>FaceXDSDK_Sample</RootNamespace>
+    <AssemblyName>FaceXDSDK-Sample</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,20 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Api\BaseApiService.cs" />
-    <Compile Include="src\Api\V1ApiService.cs" />
-    <Compile Include="src\Client.cs" />
-    <Compile Include="src\Model\NetworkPack\BaseNetworkPack.cs" />
-    <Compile Include="src\Model\NetworkPack\RawJson.cs" />
-    <Compile Include="src\Network\BaseNetworkComponent.cs" />
-    <Compile Include="src\Network\DotNetWebSocketComponent.cs" />
-    <Compile Include="src\Network\WebSocketSharpComponent.cs" />
-    <Compile Include="src\Server.cs" />
+    <Compile Include="sample\Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="src\vendor\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
-      <Project>{b357bac7-529e-4d81-a0d2-71041b19c8de}</Project>
-      <Name>websocket-sharp</Name>
+    <ProjectReference Include="FaceXDSDK.csproj">
+      <Project>{dd849cfa-3276-47cd-900c-71191aea7bcc}</Project>
+      <Name>FaceXDSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

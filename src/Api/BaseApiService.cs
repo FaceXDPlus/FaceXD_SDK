@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace FaceXDSDK.Api
 {
@@ -18,14 +15,14 @@ namespace FaceXDSDK.Api
         }
     }
 
-    public class BasePack: RawJson
+    public class BasePack : RawJson
     {
         public const string TypeSet = "set";
         public const string TypeGet = "get";
         public const string TypeAction = "action";
         public const string TypeTransaction = "transaction";
 
-        public BasePack(byte[] data): base(data)
+        public BasePack(byte[] data) : base(data)
         {
 
         }
