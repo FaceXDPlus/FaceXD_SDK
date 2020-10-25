@@ -19,3 +19,26 @@ The SDK for FaceXD and Unity/Native Socket connection
 参考`sample/Program.cs`
 
 在Unity脚本中添加对应的对象和实现。
+
+## 当前XD传输的数据：
+* uuid
+* isTracked
+* headYaw
+* headPitch
+* headRoll
+* eyeX
+* eyeY
+* eyeLOpen
+* eyeROpen
+* eyeBrowYL
+* eyeBrowYR
+* eyeBrowLForm
+* eyeBrowRForm
+* eyeLSmile
+* eyeRSmile
+* eyeBrowAngleL
+* eyeBrowAngleR
+* mouthOpenY
+* mouthForm
+* bodyAngleY
+* bodyAngleZ
